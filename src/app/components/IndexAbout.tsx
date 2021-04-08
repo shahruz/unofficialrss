@@ -9,7 +9,10 @@ const IndexAbout: FunctionComponent = () => {
       <Link href="/about">
         <a>free</a>
       </Link>{' '}
-      and <a href="https://github.com/shahruz/unofficialrss">open source</a>{' '}
+      and{' '}
+      <a href="https://github.com/shahruz/unofficialrss" target="_blank">
+        open source
+      </a>{' '}
       service. An active Stitcher Premium membership is required to access
       premium and ad-free podcasts.{' '}
       <Link href="/about">

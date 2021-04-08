@@ -17,7 +17,6 @@ const AboutPage = () => {
             subscribers of Stitcher Premium podcasts. These RSS feeds can be
             used in almost any podcast app, just like any other podcast.
           </p>
-          <p>The service stores zero personal data or login information.</p>
           <p>
             UnofficialRSS is maintained by{' '}
             <a href="https://twitter.com/shahruz" target="_blank">
@@ -33,7 +32,10 @@ const AboutPage = () => {
             Special thanks to John Long, Dan Christensen, and Ken and Madison
             from the Stitcher team for their help.
           </p>
-          <p>There are no ads or trackers on this site.</p>
+          <p>
+            The service stores zero personal data or login information. There
+            are no ads or trackers on this service.
+          </p>
         </div>
       </main>
       <style jsx>{`
