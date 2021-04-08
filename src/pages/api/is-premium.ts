@@ -1,0 +1,16 @@
+import { NextApiHandler } from 'next';
+import { ApiError } from 'next/dist/next-server/server/api-utils';
+import useAuth from 'src/server/lib/useAuth';
+
+const api: NextApiHandler = async (req, res) => {
+  const { token }: { token?: string } = req.cookies;
+  if (!token) throw new ApiError(400, 'Missing token.');
+  try {
+    const user = await useAuth(token);
+    return res.json({ isPremium: user.isPremium, token });
+  } catch (error) {
+    throw new ApiError(500, error);
+  }
+};
+
+export default api;
