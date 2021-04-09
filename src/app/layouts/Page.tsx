@@ -1,8 +1,13 @@
 import React, { FunctionComponent } from 'react';
+import Head from 'next/head';
 
 const Page: FunctionComponent = ({ children }) => {
   return (
     <div className="page">
+      <Head>
+        <title>UnofficialRSS for Stitcher Premium v2</title>
+        <link rel="icon" type="image/png" href="/static/icon.png" />
+      </Head>
       {children}
       <style jsx global>{`
         * {
