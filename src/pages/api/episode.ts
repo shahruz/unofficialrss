@@ -9,21 +9,15 @@ const api: NextApiHandler = async (req, res) => {
     if (!u) throw 'Missing token.';
     const user = await useAuth(u);
 
-    console.log({ user });
-
-    const data = await fetch(
+    const { url } = await fetch(
       `${process.env.API_BASE}/media/restricted/${id}.mp3?client=web`,
       {
         headers: { Authorization: `Bearer ${user.token?.id_token}` }
       }
     ).then(res => res.json());
 
-    console.log({
-      fetchUrl: `${process.env.API_BASE}/media/restricted/${id}.mp3?client=web`,
-      data
-    });
-
-    res.redirect(data.url);
+    if (!url) throw new Error('Missing episode url.');
+    res.redirect(url);
   } catch (error) {
     throw new ApiError(500, error);
   }
