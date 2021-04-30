@@ -8,6 +8,9 @@ const api: NextApiHandler = async (req, res) => {
     if (!id) throw 'Invalid episode id.';
     if (!u) throw 'Missing token.';
     const user = await useAuth(u);
+
+    console.log({ user });
+
     const data = await fetch(
       `${process.env.API_BASE}/media/restricted/${id}.mp3?client=web`,
       {
