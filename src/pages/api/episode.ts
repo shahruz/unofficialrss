@@ -14,6 +14,7 @@ const api: NextApiHandler = async (req, res) => {
         headers: { Authorization: `Bearer ${user.token?.id_token}` }
       }
     ).then(res => res.json());
+    console.log({ url });
     res.redirect(url);
   } catch (error) {
     throw new ApiError(500, error);
