@@ -12,7 +12,7 @@ const api: NextApiHandler = async (req, res) => {
     const { url } = await fetch(
       `${process.env.API_BASE}/media/restricted/${id}.mp3?client=web`,
       {
-        headers: { Authorization: `Bearer ${user.token?.id_token}` }
+        headers: { Authorization: `Bearer ${user.token?.access_token}` }
       }
     ).then(res => res.json());
 
