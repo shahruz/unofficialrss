@@ -5,36 +5,48 @@ const AuthFooter: FunctionComponent = () => {
   const user = useUser();
   const subscribe = () => (location.href = 'https://www.stitcher.com/premium');
   return (
-    <div className="auth-footer">
-      {!!user ? (
-        <>
-          <div className="status">
-            {user.isPremium ? (
-              <>
-                <FaCheckCircle /> Stitcher Premium Subscriber
-              </>
-            ) : (
-              <>
-                <FaExclamationCircle /> Not a Stitcher Premium Subscriber
-              </>
-            )}{' '}
-          </div>
-          <div className="buttons">
-            {!user.isPremium && (
-              <>
-                <button onClick={subscribe}>Subscribe</button>{' '}
-              </>
-            )}
-            <button onClick={logout}>Log out</button>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="message">
-            Log in to Stitcher to generate your own RSS feeds.
-          </div>
-          <button onClick={login}>Log in</button>
-        </>
+    <>
+      <div className="auth-footer">
+        {!!user ? (
+          <>
+            <div className="status">
+              {user.isPremium ? (
+                <>
+                  <FaCheckCircle /> Stitcher Premium Subscriber
+                </>
+              ) : (
+                <>
+                  <FaExclamationCircle /> Not a Stitcher Premium Subscriber
+                </>
+              )}{' '}
+            </div>
+            <div className="buttons">
+              {!user.isPremium && (
+                <>
+                  <button onClick={subscribe}>Subscribe</button>{' '}
+                </>
+              )}
+              <button onClick={logout}>Log out</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="message">
+              Log in to Stitcher to generate your own RSS feeds.
+            </div>
+            <button onClick={login}>Log in</button>
+          </>
+        )}
+      </div>
+      {!user && (
+        <div className="message">
+          Note: If you're unable to login using your Stitcher credentials, you
+          may need to login at{' '}
+          <a href="https://stitcher.com" target="_blank">
+            Stitcher.com
+          </a>{' '}
+          first to upgrade your account.
+        </div>
       )}
       <style jsx>{`
         .auth-footer {
@@ -66,6 +78,12 @@ const AuthFooter: FunctionComponent = () => {
           padding: 10px 10px;
           cursor: pointer;
         }
+        .message {
+          font-size: 14px;
+          padding: 20px;
+          opacity: 0.7;
+          line-height: 1.5em;
+        }
         @media (max-width: 768px) {
           .auth-footer {
             display: block;
@@ -79,7 +97,7 @@ const AuthFooter: FunctionComponent = () => {
           }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
