@@ -25,8 +25,8 @@ const api: NextApiHandler = async (req, res) => {
     const feed = generateFeed({ podcast, episodes, user, token: u });
     res.setHeader('Content-Type', 'application/rss+xml');
     res.setHeader(
-        'Cache-Control',
-        `s-maxage=${60 * 15}, stale-while-revalidate`
+      'Cache-Control',
+      `s-maxage=${60 * 15}, stale-while-revalidate`
     );
     return res.send(feed);
   } catch (error) {
