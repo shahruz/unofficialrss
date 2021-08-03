@@ -1,13 +1,16 @@
 interface Episode {
-  id: number;
-  guid: string;
-  podcastID: number;
-  title: string;
-  description: string;
-  htmlDescription: string;
   audioURL: string;
-  published: Date;
+  description: string;
   duration: number;
+  explicit: boolean;
+  guid: string;
+  htmlDescription?: string;
+  id: number;
+  link?: string;
+  podcastID: number;
+  published: Date;
+  slug: string;
+  title: string;
 }
 
 export default Episode;

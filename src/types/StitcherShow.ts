@@ -3,7 +3,7 @@ interface StitcherShow {
   classic_id: number;
   title: string;
   description: string;
-  html_description: string;
+  html_description?: string;
   episode_count: number;
   date_created: number;
   date_published: number;

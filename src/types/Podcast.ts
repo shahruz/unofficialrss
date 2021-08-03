@@ -2,9 +2,12 @@ interface Podcast {
   id: number;
   title: string;
   description: string;
+  link?: string;
+  htmlDescription?: string;
   image: string;
   episodeCount: number;
   color: string;
+  slug: string;
 
   // date_created: number;
   // date_published: number;
