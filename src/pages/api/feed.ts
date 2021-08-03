@@ -22,7 +22,7 @@ const api: NextApiHandler = async (req, res) => {
     } catch (error) {
       throw new ApiError(500, error);
     }
-    let feed = generateFeed({ podcast, episodes, user, token: u });
+    const feed = generateFeed({ podcast, episodes, user, token: u });
     res.setHeader('Content-Type', 'application/rss+xml');
     res.setHeader(
         'Cache-Control',
