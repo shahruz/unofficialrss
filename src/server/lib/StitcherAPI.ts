@@ -34,33 +34,51 @@ export const getSearchPremiumShows = async (
   query: string
 ): Promise<Podcast[]> => {
   const page = await get(`/search/shows?query=${query}`);
-  const shows =
-    page.data?.shows
-      .filter((show: StitcherShow) => show.restricted.includes('Premium'))
-      .filter((show: StitcherShow) => !!show.id)
-      .map(stitcherShowToPodcast) || [];
-  return shows;
+  try {
+    const shows =
+      page?.data?.shows
+        .filter((show: StitcherShow) => show.restricted.includes('Premium'))
+        .filter((show: StitcherShow) => !!show.id)
+        .map(stitcherShowToPodcast) || [];
+    return shows;
+  } catch (err) {
+    throw Error(err);
+  }
 };
 
-const get = (url: string) => fetch(BASE_URL + url).then(res => res.json());
+const get = (url: string) => fetch(BASE_URL + url).then(response => response.text())
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+      return data;
+    } catch (error) {
+      throw Error(error);
+    }
+  });
 
 const stitcherShowToPodcast = (show: StitcherShow): Podcast => ({
   id: show.id,
   title: show.title,
+  link: show.link,
   description: show.description,
+  htmlDescription: show.html_description,
   image: show.image_large,
   episodeCount: show.episode_count,
-  color: show.color_primary
+  color: show.color_primary,
+  slug: show.slug
 });
 
 const stitcherEpisodeToEpisode = (episode: StitcherEpisode): Episode => ({
   id: episode.id,
   podcastID: episode.show_id,
   title: episode.title,
+  link: episode.link,
   description: episode.description,
   htmlDescription: episode.html_description,
   published: dayjs(episode.date_published * 1000).toDate(),
   duration: episode.duration_restricted || episode.duration,
   guid: episode.guid,
-  audioURL: episode.audio_url_restricted
+  audioURL: episode.audio_url_restricted,
+  slug: episode.slug,
+  explicit: episode.explicit
 });

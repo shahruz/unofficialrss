@@ -4,7 +4,11 @@ import User from '../models/User';
 import { refreshAccessToken } from './StitcherAuth';
 
 const useAuth = async (token: string) => {
-  await connectDB();
+  try {
+      await connectDB();
+  } catch (error) {
+      throw Error(`Couldn't connect to DB`);
+  }
 
   // Read user's JWT which contains an _id for the user's account
   let _id;
@@ -12,12 +16,12 @@ const useAuth = async (token: string) => {
     _id = JWT.decode(token, process.env.JWT_KEY as string)._id;
     if (!_id) throw 'Missing _id.';
   } catch (error) {
-    throw 'Invalid token';
+    throw Error('Invalid token');
   }
 
   // Lookup by user _id
   const user = await User.findOne({ _id: _id }).lean();
-  if (!user || !user.token) throw 'Unauthorized Request.';
+  if (!user || !user.token) throw Error('Unauthorized Request.');
 
   // Read access_token and confirm Premium + non-expired
   try {
@@ -37,7 +41,7 @@ const useAuth = async (token: string) => {
       );
     }
   } catch (error) {
-    throw error;
+    throw Error(error);
   }
 
   return user;

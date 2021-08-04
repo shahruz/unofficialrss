@@ -11,8 +11,15 @@ interface Props {
   token: string;
 }
 
+const getLink = (podcast: Podcast, episode?: Episode) => {
+  if (episode) {
+    return episode.link || `https://stitcher.com/show/${podcast.slug}/episode/${episode.slug}`;
+  }
+  return podcast.link || `https://stitcher.com/show/${podcast.slug}`;
+}
+
 const FOOTER_TEXT =
-  '\n\nThis feed was generated at UnofficialRSS.com for private use.';
+    '\n\nThis feed was generated at UnofficialRSS.com for private use.';
 
 const generateFeed = ({ podcast, episodes, user, token }: Props) => {
   const rss = new RSS({
@@ -20,7 +27,7 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
     description: `${podcast.description}${FOOTER_TEXT}`,
     image_url: podcast.image,
     feed_url: `${process.env.NEXT_PUBLIC_DOMAIN}/feed/${podcast.id}.xml?u=${token}`,
-    site_url: process.env.NEXT_PUBLIC_DOMAIN as string,
+    site_url: getLink(podcast),
     generator: 'Unofficial RSS',
     language: 'en',
     copyright: 'Stitcher Premium',
@@ -32,9 +39,7 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
     },
     custom_elements: [
       { 'itunes:author': 'Stitcher Premium' },
-      {
-        'itunes:summary': podcast.description
-      },
+      { 'itunes:summary': podcast.description },
       { 'itunes:block': 'yes' },
       { 'googleplay:block': 'yes' },
       {
@@ -52,6 +57,7 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
       }
     ]
   });
+
   for (const episode of episodes) {
     const episodeURL = `${process.env.NEXT_PUBLIC_DOMAIN}/episode/${episode.id}.mp3?u=${token}`;
     rss.item({
@@ -59,13 +65,17 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
       description: `${episode.description}${FOOTER_TEXT}`,
       date: episode.published,
       guid: `Unofficial-RSS-v2-${episode.id}`,
-      url: episodeURL,
+      url: getLink(podcast, episode),
       enclosure: {
         url: episodeURL,
         type: 'audio/mpeg',
         size: 1
       },
-      custom_elements: [{ 'itunes:duration': episode.duration }]
+      custom_elements: [{
+        'itunes:duration': episode.duration,
+        'googleplay:explicit': episode.explicit,
+        'itunes:explicit': episode.explicit
+      }]
     });
   }
   const xml = rss.xml();
