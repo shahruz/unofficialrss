@@ -6,7 +6,7 @@ import { refreshAccessToken } from './StitcherAuth';
 const useAuth = async (token: string) => {
   try {
       await connectDB();
-  } catch (error) {
+  } catch (error: any) {
       throw Error(`Couldn't connect to DB`);
   }
 
@@ -15,7 +15,7 @@ const useAuth = async (token: string) => {
   try {
     _id = JWT.decode(token, process.env.JWT_KEY as string)._id;
     if (!_id) throw 'Missing _id.';
-  } catch (error) {
+  } catch (error: any) {
     throw Error('Invalid token');
   }
 
@@ -40,7 +40,7 @@ const useAuth = async (token: string) => {
         }
       );
     }
-  } catch (error) {
+  } catch (error: any) {
     throw Error(error);
   }
 

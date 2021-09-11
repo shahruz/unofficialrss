@@ -51,7 +51,7 @@ const get = (url: string) => fetch(BASE_URL + url).then(response => response.tex
     try {
       const data = JSON.parse(text);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       throw Error(error);
     }
   });

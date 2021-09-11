@@ -24,7 +24,7 @@ const api: NextApiHandler = async (req, res) => {
       `token=${token}; Max-Age=${60 * 60 * 24 * 365}; Path=/;`
     );
     res.redirect('/');
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(500).json({ error });
   }

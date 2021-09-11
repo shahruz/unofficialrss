@@ -8,8 +8,8 @@ const api: NextApiHandler = async (req, res) => {
   try {
     const user = await useAuth(token);
     return res.json({ isPremium: user.isPremium, token });
-  } catch (error) {
-    return res.send(new ApiError(500, error));
+  } catch (error: any) {
+    return res.send(new ApiError(500, error.message));
   }
 };
 

@@ -12,15 +12,15 @@ const api: NextApiHandler = async (req, res) => {
     let feedDetails;
     try {
       feedDetails = await StitcherAPI.getFeedDetails(id, true);
-    } catch (error) {
+    } catch (error: any) {
       throw 'Unable to retrieve podcast from Stitcher.';
     }
     const { podcast, episodes } = feedDetails;
     let user;
     try {
       user = await useAuth(u);
-    } catch (error) {
-      return res.send(new ApiError(401, error));
+    } catch (error: any) {
+      return res.send(new ApiError(401, error.message));
     }
     const feed = generateFeed({ podcast, episodes, user, token: u });
     res.setHeader('Content-Type', 'application/rss+xml');
@@ -29,8 +29,8 @@ const api: NextApiHandler = async (req, res) => {
       `s-maxage=${60 * 15}, stale-while-revalidate`
     );
     return res.send(feed);
-  } catch (error) {
-    return res.send(new ApiError(500, error));
+  } catch (error: any) {
+    return res.send(new ApiError(500, error.message));
   }
 };
 

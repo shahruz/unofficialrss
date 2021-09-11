@@ -18,8 +18,8 @@ const api: NextApiHandler = async (req, res) => {
 
     if (!url) throw new Error('Missing episode url.');
     res.redirect(url);
-  } catch (error) {
-    return res.send(new ApiError(500, error));
+  } catch (error: any) {
+    return res.send(new ApiError(500, error.message));
   }
 };
 
