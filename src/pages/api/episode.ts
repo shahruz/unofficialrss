@@ -1,12 +1,12 @@
 import { NextApiHandler } from 'next';
-import { sendError } from 'next/dist/next-server/server/api-utils';
+import { ApiError, sendError } from 'next/dist/next-server/server/api-utils';
 import useAuth from 'src/server/lib/useAuth';
 
 const api: NextApiHandler = async (req, res) => {
   const { id, u }: { id?: number; u?: string } = req.query;
   try {
-    if (!id) throw 'Invalid episode id.';
-    if (!u) throw 'Missing token.';
+    if (!id) throw new ApiError(400, 'Missing id.');
+    if (!u) throw new ApiError(400, 'Missing token.');
     const user = await useAuth(u);
 
     const { url } = await fetch(
@@ -16,10 +16,10 @@ const api: NextApiHandler = async (req, res) => {
       }
     ).then(res => res.json());
 
-    if (!url) throw new Error('Missing episode url.');
+    if (!url) throw new ApiError(404, `Can't find episode url.`);
     res.redirect(url);
   } catch (error: any) {
-    return sendError(res, 500, error.message);
+    return sendError(res, error.statusCode || 500, error.message);
   }
 };
 

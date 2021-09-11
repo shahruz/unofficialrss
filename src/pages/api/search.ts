@@ -14,7 +14,7 @@ const api: NextApiHandler = async (req, res) => {
       return res.json(premiumShows);
     }
   } catch(error: any) {
-    return sendError(res, 500, error.message);
+    return sendError(res, error.statusCode || 500, error.message);
   }
 };
 

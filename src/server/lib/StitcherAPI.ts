@@ -3,6 +3,7 @@ import type Podcast from 'src/types/Podcast';
 import dayjs from 'dayjs';
 import StitcherEpisode from 'src/types/StitcherEpisode';
 import Episode from 'src/types/Episode';
+import { ApiError } from 'next/dist/next-server/server/api-utils';
 
 const BASE_URL = process.env.API_BASE;
 
@@ -14,35 +15,39 @@ export const getFeedDetails = async (id: number, allPages?: boolean) => {
     pageNumber = 0;
   let podcast: Podcast | undefined;
   let episodes: Episode[] = [];
-  do {
-    page = await get(`/show/${id}/latestEpisodes?page=${pageNumber}`);
-    if (!podcast) podcast = stitcherShowToPodcast(page.data.shows[0]);
-    episodes = [
-      ...episodes,
-      ...page.data.episodes.map(stitcherEpisodeToEpisode)
-    ];
-    pageNumber++;
-  } while (
-    allPages &&
-    page.orchestration.start_index + page.orchestration.page_size <
-      page.orchestration.total_count
-  );
+  try {
+    do {
+      page = await get(`/show/${id}/latestEpisodes?page=${pageNumber}`);
+      if (!podcast) podcast = stitcherShowToPodcast(page.data.shows[0]);
+      episodes = [
+        ...episodes,
+        ...page.data.episodes.map(stitcherEpisodeToEpisode)
+      ];
+      pageNumber++;
+    } while (
+      allPages &&
+      page.orchestration.start_index + page.orchestration.page_size <
+        page.orchestration.total_count
+    );
+  } catch(error: any) {
+    throw new ApiError(error.statusCode || 500, error.message);
+  }
   return { podcast, episodes };
 };
 
 export const getSearchPremiumShows = async (
   query: string
 ): Promise<Podcast[]> => {
-  const page = await get(`/search/shows?query=${query}`);
   try {
+    const page = await get(`/search/shows?query=${query}`);
     const shows =
       page?.data?.shows
         .filter((show: StitcherShow) => show.restricted.includes('Premium'))
         .filter((show: StitcherShow) => !!show.id)
         .map(stitcherShowToPodcast) || [];
     return shows;
-  } catch (err) {
-    throw Error(err);
+  } catch (error: any) {
+    throw new ApiError(error.statusCode || 500, error.message);
   }
 };
 
@@ -52,7 +57,7 @@ const get = (url: string) => fetch(BASE_URL + url).then(response => response.tex
       const data = JSON.parse(text);
       return data;
     } catch (error: any) {
-      throw Error(error);
+      throw new ApiError(error.statusCode || 500, error.message);
     }
   });
 
