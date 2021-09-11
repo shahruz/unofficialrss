@@ -31,7 +31,7 @@ const schema = new Schema(
 let User: Model<UserType & Document>;
 try {
   User = model('User');
-} catch (error) {
+} catch (error: any) {
   User = model('User', schema);
 }
 

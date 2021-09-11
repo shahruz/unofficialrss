@@ -2,26 +2,27 @@ import JWT from 'jwt-simple';
 import connectDB from '../db';
 import User from '../models/User';
 import { refreshAccessToken } from './StitcherAuth';
+import { ApiError } from 'next/dist/next-server/server/api-utils';
 
 const useAuth = async (token: string) => {
   try {
       await connectDB();
-  } catch (error) {
-      throw Error(`Couldn't connect to DB`);
+  } catch (error: any) {
+      throw new ApiError(503, `Couldn't connect to DB`);
   }
 
   // Read user's JWT which contains an _id for the user's account
   let _id;
   try {
     _id = JWT.decode(token, process.env.JWT_KEY as string)._id;
-    if (!_id) throw 'Missing _id.';
-  } catch (error) {
-    throw Error('Invalid token');
+    if (!_id) new ApiError(400, 'Missing _id.');
+  } catch (error: any) {
+    throw new ApiError(400, 'Invalid token');
   }
 
   // Lookup by user _id
   const user = await User.findOne({ _id: _id }).lean();
-  if (!user || !user.token) throw Error('Unauthorized Request.');
+  if (!user || !user.token) throw new ApiError(403, 'Unauthorized Request.');
 
   // Read access_token and confirm Premium + non-expired
   try {
@@ -40,8 +41,8 @@ const useAuth = async (token: string) => {
         }
       );
     }
-  } catch (error) {
-    throw Error(error);
+  } catch (error: any) {
+    throw new ApiError(403, error.message);
   }
 
   return user;

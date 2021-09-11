@@ -3,11 +3,12 @@ import connectDB from 'src/server/db';
 import { getToken } from 'src/server/lib/StitcherAuth';
 import User from 'src/server/models/User';
 import JWT from 'jwt-simple';
+import { ApiError, sendError } from 'next/dist/next-server/server/api-utils';
 
 const api: NextApiHandler = async (req, res) => {
   const { code }: { code?: string } = req.query;
   try {
-    if (!code) throw 'Invalid code.';
+    if (!code) throw new ApiError(400, 'Missing code.');
     const user = await getToken(code);
     await connectDB();
     const dbUser = await User.findOneAndUpdate(
@@ -24,9 +25,9 @@ const api: NextApiHandler = async (req, res) => {
       `token=${token}; Max-Age=${60 * 60 * 24 * 365}; Path=/;`
     );
     res.redirect('/');
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
-    res.status(500).json({ error });
+    sendError(res, error.statusCode || 500, error.message);
   }
 };
 
