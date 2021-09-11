@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import { ApiError } from 'next/dist/next-server/server/api-utils';
+import { sendError } from 'next/dist/next-server/server/api-utils';
 import generateFeed from 'src/server/lib/generateFeed';
 import * as StitcherAPI from 'src/server/lib/StitcherAPI';
 import useAuth from 'src/server/lib/useAuth';
@@ -20,7 +20,7 @@ const api: NextApiHandler = async (req, res) => {
     try {
       user = await useAuth(u);
     } catch (error: any) {
-      return res.send(new ApiError(401, error.message));
+      return sendError(res, 401, error.message);
     }
     const feed = generateFeed({ podcast, episodes, user, token: u });
     res.setHeader('Content-Type', 'application/rss+xml');
@@ -30,7 +30,7 @@ const api: NextApiHandler = async (req, res) => {
     );
     return res.send(feed);
   } catch (error: any) {
-    return res.send(new ApiError(500, error.message));
+    return sendError(res, 500, error.message);
   }
 };
 

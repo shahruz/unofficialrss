@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import { ApiError } from 'next/dist/next-server/server/api-utils';
+import { sendError } from 'next/dist/next-server/server/api-utils';
 import useAuth from 'src/server/lib/useAuth';
 
 const api: NextApiHandler = async (req, res) => {
@@ -9,7 +9,7 @@ const api: NextApiHandler = async (req, res) => {
     const user = await useAuth(token);
     return res.json({ isPremium: user.isPremium, token });
   } catch (error: any) {
-    return res.send(new ApiError(500, error.message));
+    return sendError(res, 500, error.message);
   }
 };
 

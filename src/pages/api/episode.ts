@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import { ApiError } from 'next/dist/next-server/server/api-utils';
+import { sendError } from 'next/dist/next-server/server/api-utils';
 import useAuth from 'src/server/lib/useAuth';
 
 const api: NextApiHandler = async (req, res) => {
@@ -19,7 +19,7 @@ const api: NextApiHandler = async (req, res) => {
     if (!url) throw new Error('Missing episode url.');
     res.redirect(url);
   } catch (error: any) {
-    return res.send(new ApiError(500, error.message));
+    return sendError(res, 500, error.message);
   }
 };
 
