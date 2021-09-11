@@ -20,7 +20,7 @@ const api: NextApiHandler = async (req, res) => {
     try {
       user = await useAuth(u);
     } catch (error) {
-      throw new ApiError(500, error);
+      return res.send(new ApiError(401, error));
     }
     const feed = generateFeed({ podcast, episodes, user, token: u });
     res.setHeader('Content-Type', 'application/rss+xml');
@@ -30,7 +30,7 @@ const api: NextApiHandler = async (req, res) => {
     );
     return res.send(feed);
   } catch (error) {
-    throw new ApiError(500, error);
+    return res.send(new ApiError(500, error));
   }
 };
 
