@@ -11,12 +11,18 @@ interface Props {
   token: string;
 }
 
+const isUrl = (url?: String) => {
+    return url && url.match(/^https?:\/\//i)
+};
+
 const getLink = (podcast: Podcast, episode?: Episode) => {
   if (episode) {
-    return episode.link || `https://stitcher.com/show/${podcast.slug}/episode/${episode.slug}`;
+    return isUrl(episode.link) && episode.link ||
+        `https://stitcher.com/show/${podcast.slug}/episode/${episode.slug}`;
   }
-  return podcast.link || `https://stitcher.com/show/${podcast.slug}`;
-}
+  return isUrl(podcast.link) && podcast.link ||
+    `https://stitcher.com/show/${podcast.slug}`;
+};
 
 const FOOTER_TEXT =
     '\n\nThis feed was generated at UnofficialRSS.com for private use.';
@@ -30,7 +36,7 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
     site_url: getLink(podcast),
     generator: 'Unofficial RSS',
     language: 'en',
-    copyright: 'Stitcher Premium',
+    copyright: podcast.author,
     ttl: 60,
     pubDate: new Date(),
     custom_namespaces: {
@@ -38,8 +44,8 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
       googleplay: 'http://www.google.com/schemas/play-podcasts/1.0'
     },
     custom_elements: [
-      { 'itunes:author': 'Stitcher Premium' },
-      { 'itunes:summary': podcast.description },
+      { 'itunes:author':  podcast.author },
+      { 'itunes:summary': `${podcast.description}${FOOTER_TEXT}` },
       { 'itunes:block': 'yes' },
       { 'googleplay:block': 'yes' },
       {
@@ -71,11 +77,13 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
         type: 'audio/mpeg',
         size: 1
       },
-      custom_elements: [{
-        'itunes:duration': episode.duration,
-        'googleplay:explicit': episode.explicit,
-        'itunes:explicit': episode.explicit
-      }]
+      custom_elements: [
+        {'itunes:episodeType': episode.episode_type },
+        {'itunes:season': episode.season },
+        {'itunes:duration': episode.duration },
+        {'googleplay:explicit': episode.explicit },
+        {'itunes:explicit': episode.explicit }
+      ]
     });
   }
   const xml = rss.xml();

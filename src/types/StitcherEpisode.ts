@@ -11,7 +11,9 @@ interface StitcherEpisode {
   duration: number;
   duration_restricted: number | null;
   slug: string;
-  explicit: boolean;
+  explicit?: boolean;
+  season?: string;
+  episode_type?: string;
 }
 
 export default StitcherEpisode;

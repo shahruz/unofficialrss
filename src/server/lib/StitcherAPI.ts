@@ -63,8 +63,9 @@ const get = (url: string) => fetch(BASE_URL + url).then(response => response.tex
 
 const stitcherShowToPodcast = (show: StitcherShow): Podcast => ({
   id: show.id,
+  author: show.author || 'Stitcher Premium',
   title: show.title,
-  link: show.link,
+  link: show.link || show.stitcher_link,
   description: show.description,
   htmlDescription: show.html_description,
   image: show.image_large,
@@ -85,5 +86,7 @@ const stitcherEpisodeToEpisode = (episode: StitcherEpisode): Episode => ({
   guid: episode.guid,
   audioURL: episode.audio_url_restricted,
   slug: episode.slug,
-  explicit: episode.explicit
+  episode_type: episode.episode_type || 'full',
+  explicit: episode.explicit || false,
+  season: episode.season,
 });

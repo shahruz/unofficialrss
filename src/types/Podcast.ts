@@ -1,5 +1,6 @@
 interface Podcast {
   id: number;
+  author: string;
   title: string;
   description: string;
   link?: string;
