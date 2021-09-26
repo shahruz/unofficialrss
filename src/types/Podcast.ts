@@ -8,6 +8,7 @@ interface Podcast {
   episodeCount: number;
   color: string;
   slug: string;
+  showType: string;
 
   // date_created: number;
   // date_published: number;

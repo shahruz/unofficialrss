@@ -27,6 +27,7 @@ interface StitcherShow {
   years: Array<number>;
   restricted: Array<string>;
   slug: string;
+  showType: string;
   tags: Array<{
     id: number;
     name: string;

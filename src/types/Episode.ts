@@ -11,6 +11,7 @@ interface Episode {
   published: Date;
   slug: string;
   title: string;
+  isPremium: boolean;
 }
 
 export default Episode;
