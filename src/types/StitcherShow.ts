@@ -1,5 +1,6 @@
 interface StitcherShow {
   id: number;
+  author: string;
   classic_id: number;
   title: string;
   description: string;

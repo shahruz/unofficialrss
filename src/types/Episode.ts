@@ -2,7 +2,7 @@ interface Episode {
   audioURL: string;
   description: string;
   duration: number;
-  explicit: boolean;
+  explicit?: boolean;
   guid: string;
   htmlDescription?: string;
   id: number;
@@ -12,6 +12,8 @@ interface Episode {
   slug: string;
   title: string;
   isPremium: boolean;
+  season?: string;
+  episode_type?: string;
 }
 
 export default Episode;
