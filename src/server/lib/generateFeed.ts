@@ -53,7 +53,7 @@ const generateFeed = ({ podcast, episodes, user, token }: Props) => {
     },
     custom_elements: [
       { 'itunes:author':  podcast.author },
-      { 'itunes:summary': `${podcast.description}${FOOTER_TEXT}` },
+      { 'itunes:summary': podcastDescription },
       { 'itunes:block': 'yes' },
       { 'googleplay:block': 'yes' },
       {
