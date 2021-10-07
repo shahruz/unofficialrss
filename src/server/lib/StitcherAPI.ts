@@ -63,14 +63,16 @@ const get = (url: string) => fetch(BASE_URL + url).then(response => response.tex
 
 const stitcherShowToPodcast = (show: StitcherShow): Podcast => ({
   id: show.id,
+  author: show.author || 'Stitcher Premium',
   title: show.title,
-  link: show.link,
+  link: show.link || show.stitcher_link,
   description: show.description,
   htmlDescription: show.html_description,
   image: show.image_large,
   episodeCount: show.episode_count,
   color: show.color_primary,
-  slug: show.slug
+  slug: show.slug,
+  showType: show.showType
 });
 
 const stitcherEpisodeToEpisode = (episode: StitcherEpisode): Episode => ({
@@ -83,7 +85,10 @@ const stitcherEpisodeToEpisode = (episode: StitcherEpisode): Episode => ({
   published: dayjs(episode.date_published * 1000).toDate(),
   duration: episode.duration_restricted || episode.duration,
   guid: episode.guid,
-  audioURL: episode.audio_url_restricted,
+  audioURL: episode.audio_url_restricted || episode.audio_url,
   slug: episode.slug,
-  explicit: episode.explicit
+  isPremium: Boolean(episode.duration_restricted),
+  episode_type: episode.episode_type || 'full',
+  explicit: episode.explicit || false,
+  season: episode.season,
 });

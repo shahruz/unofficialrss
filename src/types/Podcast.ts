@@ -1,5 +1,6 @@
 interface Podcast {
   id: number;
+  author: string;
   title: string;
   description: string;
   link?: string;
@@ -8,6 +9,7 @@ interface Podcast {
   episodeCount: number;
   color: string;
   slug: string;
+  showType: string;
 
   // date_created: number;
   // date_published: number;

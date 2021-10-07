@@ -1,5 +1,6 @@
 interface StitcherShow {
   id: number;
+  author: string;
   classic_id: number;
   title: string;
   description: string;
@@ -27,6 +28,7 @@ interface StitcherShow {
   years: Array<number>;
   restricted: Array<string>;
   slug: string;
+  showType: string;
   tags: Array<{
     id: number;
     name: string;
